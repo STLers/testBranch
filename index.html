@@ -59,10 +59,60 @@
         }
         //深拷贝
         const deepClone = target => {
-            if(typeof target !== 'obkect' || target === null)return target
-            const cloneTarget = Array.isArray()
+            if(typeof target !== 'object' || target === null)return target
+            const cloneTarget = Array.isArray(target) ? [] : {}
+            
+        }
+        //ajax
+        const getJSON = url => new Promise((resolve, reject) => {
+            const xhr = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHttp')
+            xhr.open('GET', url, false)
+            xhr.send()
+            xhr.onreadystate = function(){
+                if(xhr.readystate === 4 && xhr.status === 200){
+                    resolve(xhr.response)
+                }else{
+                    reject(new Error(res.responseText))
+                }
+            }
+
+        })
+        //图片懒加载
+        function lazyLoad(){
+            const imgs = document.getElementsByTagName('img')
+            const len = imgs.length
+            const viewHeight = document.documentElement.clientHeight
+            const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop
+            for(let i = 0; i < len; ++i){
+                const offsetHeight = imgs[i].offsetTop
+                if(offsetHeight < viewHeight + scrollHeight){
+                    const src = imgs[i].dataset.src
+                }
+            }
+        }
+        window.addEventListener('scroll', lazyLoad)
+        //打印当前页面使用了多少种html元素
+        const fn = () => {
+            return [
+                ...new Set(
+                    [
+                        ...document.querySelectorAll('*')
+                    ].map(el => el.tagName))
+            ].length
+        }
+        //虚拟dom => 真是dom
+        function render(vnode, container){
+
         }
         try{
+            const fn = () => {
+                return [
+                    ...new Set(
+                        [
+                            ...document.querySelectorAll('*')
+                        ].map(el => el.tagName))
+                ].length
+            }
             //对象都具有一个原型对象，指向构造函数的原型（Object.prototype, Date.prototype, Array.prototype）
             //Object.prototype没有原型对象
             // var o1 = {}
