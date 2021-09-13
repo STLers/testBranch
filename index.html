@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var arr = [1, [2, 3, [4, 5], 6], 7]
+        //数组扁平化
+        const flattern = arr => {
+            return arr.reduce((pre, cur) => {
+                return pre.concat(Array.isArray(cur) ? flattern(cur) : cur)
+            }, [])
+        }
+        console.log(arr.flat(Infinity))
+        var str = JSON.stringify(arr)
+        console.log(str, str.replace(/\[|\]/g, '').split(','))
+        //数组去重
+        const res1 = Array.from(new Set(arr))
+        const unique2 = arr => {
+            return arr.filter((item, index) => {
+                return arr.indexOf(item) === index
+            })
+        }
+        const unique = arr => {
+            const res = []
+            arr.forEach(val => {
+                if(res.indexOf(val) === -1)res.push(val)
+            })
+            return res
+        }
+        //类数组转换为数组
+        Array.from(document.getElementsByClassName('className'))
+        Array.prototype.slice.call(document.getElementsByClassName('className'));
+        [...document.getElementsByClassName('className')]
+        //模拟new操作符
+        function myNew(ctor, ...args){
+            if(typeof ctor !== 'funcction'){
+                throw new TypeError('Type Error')
+            }
+            const obj = Object.create(ctor.prototype)
+            const res = ctor.apply(obj, args)
+            const isObject = typeof res === 'object' && res != null
+            const isFunction = typeof res === 'function'
+            return isObject || isFunction ? res : obj
+        }
+        // 模拟instanceof
+        const myInstanceOf = (instance, className) => {
+            if(typeof instance !== 'object' || instance === null) return false
+            let proto = Object.getPrototypeOf(instance)
+            while(true){
+                if(proto === null)return false
+                if(proto === className.prototype)return true
+                proto = Object.getPrototypeOf(proto)
+            }
+        }
+        //深拷贝
+        const deepClone = target => {
+            if(typeof target !== 'object' || target === null)return target
+            const cloneTarget = Array.isArray(target) ? [] : {}
+            
+        }
+        //ajax
+        const getJSON = url => new Promise((resolve, reject) => {
+            const xhr = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHttp')
+            xhr.open('GET', url, false)
+            xhr.send()
+            xhr.onreadystate = function(){
+                if(xhr.readystate === 4 && xhr.status === 200){
+                    resolve(xhr.response)
+                }else{
+                    reject(new Error(res.responseText))
+                }
+            }
+
+        })
+        //图片懒加载
+        function lazyLoad(){
+            const imgs = document.getElementsByTagName('img')
+            const len = imgs.length
+            const viewHeight = document.documentElement.clientHeight
+            const scrollHeight = document.documentElement.scrollTop || document.body.scrollTop
+            for(let i = 0; i < len; ++i){
+                const offsetHeight = imgs[i].offsetTop
+                if(offsetHeight < viewHeight + scrollHeight){
+                    const src = imgs[i].dataset.src
+                }
+            }
+        }
+        window.addEventListener('scroll', lazyLoad)
+        //打印当前页面使用了多少种html元素
+        const fn = () => {
+            return [
+                ...new Set(
+                    [
+                        ...document.querySelectorAll('*')
+                    ].map(el => el.tagName))
+            ].length
+        }
+        //虚拟dom => 真实dom
+        function render(vnode, container){
+            container.appendChild(_render(vnode))
+        }
+        function _render(vnode){
+            if(typeof vnode === 'number'){
+                vnode = String(vnode)
+            }
+            if(typeof vnode === 'string'){
+                return document.createTextNode(vnode)
+            }
+            const dom = document.createElement(vnode.tag)
+            if(vnode.attrs){
+                Object.keys(vnode.attrs).forEach(key => {
+                    const value = vnode.attrs[key]
+                    dom.setAttribute(key, value)
+                })
+            }
+            vnode.children.forEach(child => render(child, dom))
+        }
+        try{
+            const fn = () => {
+                return [
+                    ...new Set(
+                        [
+                            ...document.querySelectorAll('*')
+                        ].map(el => el.tagName))
+                ].length
+            }
+            //对象都具有一个原型对象，指向构造函数的原型（Object.prototype, Date.prototype, Array.prototype）
+            //Object.prototype没有原型对象
+            // var o1 = {}
+            // var o2 = new Object()
+            // var o3 = Object.create({x:1,y:2}, {}) //第一个参数为该对象的原型，第二个为可选的，描述对象属性。以某个对象为原型创建新对象
+            // var p = {x:1}
+            // var p1 = Object.create(p)
+            // console.log(p.isPrototypeOf(p1))
+            // console.log(o1)
+            // console.log(Object.getPrototypeOf(o3), o3.constructor.prototype) //
+            // var o4 = Object.create(Object.prototype) //等价于 var o4 = {} 和 var o4 = new Object()
+            // console.log(o3)
+            // var arr1 = new Array()
+            // var arr2 = [1,3,2]
+            // console.log(arr2.sort(), arr2)
+            // var o = {x:1}
+            // "x" in o          //true   原型链查找  hasOwnProperty()函数只查找自身属性
+            // "y" in o         //false
+            // "toString" in o //true
+        }catch(e){}
+    </script>
+</body>
+</html>
