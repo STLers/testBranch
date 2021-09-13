@@ -5,3 +5,5 @@ var c = 3
 =======
 var c = 3
 >>>>>>> ed84eec (asdasd)
+
+//asdasd
